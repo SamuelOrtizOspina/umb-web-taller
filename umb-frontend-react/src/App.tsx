@@ -1,23 +1,29 @@
 import { useState, useEffect } from "react";
 import "./styles.css";
 
+interface Tarea {
+  id: number;
+  titulo: string;
+  completada?: boolean;
+}
+
 export default function App() {
   const [titulo, setTitulo] = useState("");
-  const [tareas, setTareas] = useState([]);
+  const [tareas, setTareas] = useState<Tarea[]>([]);
 
   // Cargar tareas
   useEffect(() => {
-    fetch("https://umb-web-taller-nlmm.onrender.com/api/index.php")
+    fetch("https://umb-web-taller-nlmn.onrender.com/api/index.php")
       .then((res) => res.json())
       .then((data) => setTareas(data))
       .catch((err) => console.error("Error cargando tareas:", err));
   }, []);
 
   // Agregar tarea
-  const agregarTarea = (e) => {
+  const agregarTarea = (e: React.FormEvent) => {
     e.preventDefault();
 
-    fetch("https://umb-web-taller-nlmm.onrender.com/api/index.php", {
+    fetch("https://umb-web-taller-nlmn.onrender.com/api/index.php", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ titulo }),
@@ -46,7 +52,7 @@ export default function App() {
 
       <ul>
         {tareas.map((t, i) => (
-          <li key={i}>{t.titulo}</li>
+          <li key={t.id ?? i}>{t.titulo}</li>
         ))}
       </ul>
     </div>
